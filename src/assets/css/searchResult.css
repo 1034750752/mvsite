@@ -1,0 +1,109 @@
+.breadcrumbs {
+  padding-bottom: 15px;
+}
+
+.search_head {
+  margin: 20px 0;
+}
+
+main {
+  font-size: 13px;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.search_head a:first-child {
+  border-left: 1px solid #e7e7e7;
+}
+
+.search_head .on {
+  color: #fff;
+  background-color: #008ee6;
+  filter: none;
+}
+
+.search_head a {
+  color: #333;
+  padding: 5px 10px;
+  border-bottom: 1px solid #e7e7e7;
+  border-top: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
+}
+
+.right {
+  float: right;
+}
+
+.sr_lists {
+  padding-top: 20px;
+}
+
+.sr_lists .v5d {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sr_lists .v5d .img {
+  position: relative;
+  height: 200px;
+  width: 140px;
+  margin-right: 20px;
+}
+
+a {
+  color: #337ab7;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sr_lists .v5d .img img {
+  height: 100%;
+  width: 100%;
+}
+
+.content-list img,
+.main-right .whits img,
+.content-list2 img,
+.sr_lists img,
+.foucebox .hd ul img,
+.showDiv img {
+  object-fit: cover;
+}
+
+.sr_lists .v5d .text {
+  flex: 1;
+  min-width: 0;
+}
+
+b {
+  font-weight: bold;
+}
+.sr_lists .text b a {
+  display: -webkit-box; /* 必须是 Flexbox 或者 Box 模型 */
+  -webkit-box-orient: vertical; /* 必须设置垂直方向 */
+  -webkit-line-clamp: 1; /* 限制为 2 行 */
+  line-clamp: 1;
+  overflow: hidden; /* 隐藏多余的部分 */
+}
+
+.sr_lists .d16,
+.sr_lists .d16 em {
+  font-size: 18px;
+}
+
+.sr_lists .text p {
+  margin-top: 10px;
+  line-height: 1.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.el-pagination {
+  justify-content: center;
+  margin: 50px 0 50px 0;
+}

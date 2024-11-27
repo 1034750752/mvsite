@@ -1,0 +1,87 @@
+.list-box dl {
+  display: flex;
+  align-items: baseline;
+  flex-direction: row;
+  overflow: hidden;
+  border-bottom: 1px solid #e7e7e7;
+  user-select: none;
+}
+
+dl {
+  display: block;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  unicode-bidi: isolate;
+}
+
+.list-box dt {
+  width: 46px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.list-box .sort {
+  padding: 15px 0 25px 0;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+}
+
+dt {
+  display: block;
+  unicode-bidi: isolate;
+}
+
+.list-box dd {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  font-size: 14px;
+  margin-inline-start: 0;
+}
+
+.list-box .c0 .on,
+.list-box .c2 .on,
+.list-box .c3 .on {
+  background: #ff8f00;
+}
+
+.list-box dd a.on {
+  color: #fff;
+  border-radius: 4px;
+  filter: none;
+}
+
+.list-box dd a {
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 20px;
+  height: 20px;
+  text-align: center;
+  padding: 0 3px;
+  margin: 5px 7px 5px 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.list-box dd a:hover {
+  text-decoration: underline;
+  color: #d81e06;
+}
+
+.list-box .sort {
+  padding: 15px 0 25px 0;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.el-pagination {
+  justify-content: center;
+  margin: 50px 0 50px 0;
+}

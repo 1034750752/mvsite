@@ -1,0 +1,108 @@
+.login-box .login-footer {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.login-box button[id="button"]:hover {
+  background: #18A5F5;
+}
+
+input:focus,
+textarea:focus {
+  border: 1px solid #008ee6;
+}
+
+a {
+  color: #337ab7;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover,
+.checkbox span:hover,
+.friendlink a:hover {
+  color: #d81e06;
+}
+
+.login-box {
+  width: 400px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px #e7e7e7;
+  font-size: 14px;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"],
+.login-box button {
+  width: 100%;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.login-box h2 {
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+
+.login-box .title {
+  margin-bottom: 3px;
+  display: block;
+}
+
+.right {
+  float: right;
+}
+
+.login-box .tipsback {
+  margin: 15px 0;
+  color: red;
+  text-align: center;
+  font-size: 12px;
+}
+
+.login-box .reme {
+  margin: 10px 0;
+}
+
+.login-box .tips,
+.login-box .logli {
+  margin-bottom: 10px;
+}
+
+.login-box .tips {
+  font-size: 12px;
+}
+
+.login-box .reme input[type="checkbox"] {
+  vertical-align: middle;
+}
+
+.login-box button[id="button"] {
+  background: #008ee6;
+  border: 0;
+  padding: 8px;
+  font-size: 14px;
+  color: #FFF;
+  border-radius: 5px;
+  cursor: pointer;
+  filter: none;
+}
+
+input,
+textarea,
+button {
+  outline: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin: 0;
+  color: #333;
+  ;
+  box-sizing: border-box;
+}

@@ -1,0 +1,152 @@
+.nav-link {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16pxpx;
+  padding: 0;
+}
+
+.nav .tx {
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.nav .tx img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+/* .btn:hover {
+  color: rgb(72, 159, 119, 0.5);
+  background-color: rgb(4, 6, 5);
+  border-color: rgb(72, 159, 119, 0.5);
+} */
+header {
+  background-color: #fff;
+  width: 100%;
+  background-size: 100%, 100%;
+  margin-bottom: 15px;
+  height: 60px;
+  flex: 0 0 auto;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  position: fixed;
+  padding: 30px 0 60px 0;
+}
+
+header {
+  display: block;
+  unicode-bidi: isolate;
+}
+
+.nav .sub {
+  padding: 0;
+  margin: 0;
+}
+
+.nav .sub a {
+  margin: 0;
+  display: block;
+  padding: 3px 15px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  white-space: nowrap;
+  text-decoration: none;
+  color: #333;
+}
+
+.nav .sub li {
+  float: none;
+}
+
+.nav .utx {
+  overflow: hidden;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav .sub a:hover {
+  color: #555 !important;
+}
+
+.nav .sub li:hover {
+  background-color: #f5f5f5;
+}
+
+.nav .utx img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.user_menu {
+  display: inline-block;
+}
+
+.user_menu span {
+  display: inline-block;
+}
+
+.user_menu span a {
+  font-size: 16px;
+  margin: 0 8px;
+  padding: 20px 0 20px 0;
+}
+
+.user_menu span a:hover {
+  color: #008ee6;
+}
+
+.user_menu a {
+  text-decoration: none;
+  color: #333;
+}
+
+#historys {
+  display: none;
+  position: absolute;
+  right: -20px;
+  z-index: 99999999;
+  background: #fff;
+  width: 250px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
+  border: 1px solid #e7e7e7;
+  border-radius: 4px;
+}
+
+.nav .uj4 {
+  display: flex;
+  align-items: center;
+  margin: 0 15px 10px 15px;
+}
+
+.nav .un0 {
+  margin-left: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+.nav {
+  position: relative;
+}
+
+.nav .u5d {
+  box-shadow: 0 2px 4px rgb(0 0 0 / 16%);
+  line-height: 10px;
+  border-top: 0px !important;
+  border: 1px solid #e7e7e7;
+  position: absolute;
+  z-index: 100;
+  background-color: #fff;
+  right: 0;
+  top: 60px;
+  padding: 10px 0;
+  width: 250px;
+  color: #333;
+}

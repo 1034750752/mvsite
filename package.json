@@ -1,0 +1,100 @@
+{
+  "name": "mvsite",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --port 80",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@videojs-player/vue": "^1.0.0",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
+    "bootstrap-vue": "^2.23.1",
+    "core-js": "^3.8.3",
+    "dotenv": "^16.4.5",
+    "element-plus": "^2.8.7",
+    "jwt-decode": "^4.0.0",
+    "moment": "^2.30.1",
+    "sass": "^1.80.6",
+    "sass-loader": "^16.0.3",
+    "vue": "^3.2.13",
+    "vue-class-component": "^8.0.0-0",
+    "vue-cookies": "^1.8.4",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-vue": "^7.20.0",
+    "less": "^4.0.0",
+    "less-loader": "^8.0.0",
+    "typescript": "~5.1.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "globals": {
+      "defineProps": "readonly",
+      "defineEmits": "readonly",
+      "defineExpose": "readonly",
+      "withDefaults": "readonly"
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {
+      "quotes": "off",
+      "semi": "off",
+      "indent": "off",
+      "comma-dangle": "off",
+      "vue/multi-word-component-names": "off",
+      "no-trailing-spaces": "off",
+      "curly": "off",
+      "brace-style": "off",
+      "key-spacing": "off",
+      "arrow-spacing": "off",
+      "object-curly-spacing": "off",
+      "space-before-blocks": "off",
+      "keyword-spacing": "off",
+      "comma-spacing": "off",
+      "camelcase": "off",
+      "spaced-comment": "off",
+      "vue/return-in-computed-property": "off",
+      "space-infix-ops": "off",
+      "no-multiple-empty-lines": "off",
+      "no-multi-spaces": "off",
+      "prefer-const": "off",
+      "eol-last": "off",
+      "space-before-function-paren": "off",
+      "@typescript-eslint/no-unused-vars": "off"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
