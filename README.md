@@ -1,5 +1,5 @@
 # mvsite
-
+node 版本v16.20.2
 ## Project setup
 ```
 npm install
