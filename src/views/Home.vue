@@ -4,7 +4,7 @@
             <div class="bd">
                 <div
                     class="showDiv"
-                    v-for="(item, index) in fouceList"
+                    v-for="(item, index) in bd"
                     :key="index"
                     v-show="autoIndex === index"
                     @mouseenter="stopPlayList"
@@ -12,12 +12,12 @@
                 >
                     <a
                         @click="
-                            linkToDt(item.bd1.mvId, findName(item.bd1.type))
+                            linkToDt(item.List1.mvId, findName(item.List1.type))
                         "
                     >
                         <picture>
                             <img
-                                :src="cover[index].url"
+                                :src="item.slidImg"
                                 class="lazy entered loaded"
                             />
                         </picture>
@@ -27,44 +27,50 @@
                             <a
                                 @click="
                                     linkToDt(
-                                        item.bd1.mvId,
-                                        findName(item.bd1.type)
+                                        item.List1.mvId,
+                                        findName(item.List1.type)
                                     )
                                 "
-                                >{{ item.bd1.title }}</a
+                                >{{ item.List1.title }}</a
                             >
                         </h3>
-                        <p>{{ item.bd2.description }}</p>
+                        <p>{{ item.List2.description }}</p>
                     </div>
                 </div>
             </div>
             <div class="hd">
                 <ul>
                     <li
-                        v-for="(item, index) in fouceList"
+                        v-for="(item, index) in bd"
                         :key="index"
                         :class="{ on: autoIndex === index }"
                         @mouseenter="(autoIndex = index), stopPlayList()"
+                        @mouseleave="autoPlayList"
                     >
                         <a
                             @click="
-                                linkToDt(item.bd1.mvId, findName(item.bd1.type))
+                                linkToDt(
+                                    item.List1.mvId,
+                                    findName(item.List1.type)
+                                )
                             "
                         >
                             <div class="img">
                                 <picture>
-                                    <img :src="item.bd2.cover" />
+                                    <img :src="item.List2.cover" />
                                 </picture>
                             </div>
                             <div class="detail">
-                                <div class="title">{{ item.bd1.title }}</div>
+                                <div class="title">{{ item.List1.title }}</div>
                                 <div class="info">
                                     {{
-                                        item.bd1.type + " | " + item.bd1.country
+                                        item.List1.type +
+                                        " | " +
+                                        item.List1.country
                                     }}
                                 </div>
                                 <div class="des">
-                                    {{ item.bd2.description }}
+                                    {{ item.List2.description }}
                                 </div>
                             </div>
                         </a>
@@ -75,30 +81,24 @@
         <RecommendSection
             title="新片推荐"
             :rec="recmv"
-            :loading="loading"
             :index="recIndex_mv"
             @change="change"
-            @linkToDt="linkToDt"
             name2="mv"
             name="mvdt"
         />
         <RecommendSection
             title="新番推荐"
             :rec="recct"
-            :loading="loading"
             :index="recIndex_ct"
             @change="change"
-            @linkToDt="linkToDt"
             name2="ct"
             name="ctdt"
         />
         <RecommendSection
             title="新剧推荐"
             :rec="rectv"
-            :loading="loading"
             :index="recIndex_tv"
             @change="change"
-            @linkToDt="linkToDt"
             name2="tv"
             name="tvdt"
         />
@@ -107,22 +107,17 @@
 
 <script setup>
 // MainComponent.vue
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
-import { fetchRecommendData, fetchBdData } from "../utils/api";
+import { fetchRecommendData, fetchSlides } from "../utils/api";
 import RecommendSection from "../components/Home/RecommendSection.vue";
-import { cover } from "../assets/js/cover";
 
 const recct = ref([]);
 const recmv = ref([]);
 const rectv = ref([]);
-const bd1 = ref([]);
-const bd2 = ref([]);
-const cate = ref([]);
+const bd = ref([]);
 const loading = ref(false);
-const imagesLoaded = ref(0);
-const pageIndex = ref(1);
-const searchKey = ref("");
+
 const autoIndex = ref(0);
 let autoPlay = null;
 const totalPages = ref(5);
@@ -132,7 +127,6 @@ const recIndex_ct = ref({ value: 1 });
 // 清除原数据
 const change = (index) => {
     index.value = index.value === totalPages.value ? 1 : index.value + 1;
-    console.log(index.value);
     fetchData();
 };
 
@@ -168,13 +162,8 @@ const fetchData = async () => {
 
 const getBdData = async () => {
     try {
-        const { bd1: bd1Data, bd2: bd2Data } = await fetchBdData(
-            3,
-            6,
-            searchKey.value
-        );
-        bd1.value = bd1Data;
-        bd2.value = bd2Data;
+        const { List } = await fetchSlides();
+        bd.value = List;
     } catch (error) {
         console.error("Error fetching bd data:", error);
     }
@@ -207,19 +196,9 @@ onBeforeRouteUpdate((to, from, next) => {
 watch([recIndex_mv, recIndex_ct, recIndex_tv], () => {
     fetchData();
 });
-
-const fouceList = computed(() =>
-    bd1.value.map((item, index) => ({
-        bd1: item,
-        bd2: bd2.value.find((b) => b.dtId === item.mvId) || {},
-    }))
-);
 </script>
-<!-- <style scoped lang="sass" src="@/assets/css/bootstrap-icons.css"></style>
-<style lang="sass" src='@/assets/css/bootstrap.css'></style>
-<style lang="sass" src= "@/assets/css/mv.css"></style> -->
+
 <style lang="css" scoped>
-/* @import "@/assets/css/bootstrap.css"; */
 @import "@/assets/css/mv.css";
 @import "@/assets/css/searchResult.css";
 </style>

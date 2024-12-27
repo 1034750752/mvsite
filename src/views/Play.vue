@@ -2,40 +2,73 @@
     <div class="play-content" @mousemove="showTitle">
         <h2 ref="titleElement" :style="{ opacity: titleOpacity }" class="title">
             {{ mv.title }}
-            <span v-if="!(mv.type === '电影')">第{{ getNum(i) }}集</span>
+            <span v-if="!(mv.type === '电影')">第{{ FormatNum(i) }}集</span>
         </h2>
-        <video-player
-            src="../../public/video/1.mp4"
-            :options="playerOptions"
-            :volume="0.6"
-        >
+        <video-player :src="url" :options="playerOptions" :volume="0.6">
         </video-player>
+        <div class="play-tab" ref="tabBox">
+            <h2>
+                <a :href="routeTitle(mv.mvId)">{{ mv.title }}</a>
+            </h2>
+            <div class="slid-playbox">
+                <div class="play_jump" v-if="parseInt(mv.quality, 10)">
+                    <span><a :href="backORnext(i)">上一集</a></span>
+                    <span><a :href="backORnext(i, 'next')">下一集</a></span>
+                </div>
+                <div v-else style="margin-bottom: 30px"></div>
+                <ul class="showplayul" v-if="parseInt(mv.quality, 10)">
+                    <li
+                        v-for="(item, value) in range(parseInt(mv.quality, 10))"
+                        :key="value"
+                    >
+                        <a
+                            :href="changeNum(item)"
+                            :class="{ on: Number(item) === Number(i) }"
+                            >第{{ FormatNum(item) }}集</a
+                        >
+                    </li>
+                </ul>
+                <ul class="showplayul" v-else>
+                    <li>
+                        <a class="on">正片</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </template>
   
   <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick, computed } from "vue";
+import { changeTit } from "../utils/changeTit";
 import axios from "../store/axios";
+import { getType } from "../utils/MvPublic";
+import { FormatNum, range } from "../utils/public";
 // 视频链接地址
 const route = useRoute();
-const id_i = route.params.id_i.split("_");
-const id = id_i[0];
-const i = id_i[1];
+const id_i = ref(route.params.id_i.split("_"));
+const id = id_i.value[0];
+const i = id_i.value[1];
 console.log(id);
+console.log(i);
+
 // 视频源设置
-const cate = "mp4";
 const mv = ref({});
 const server = process.env.VUE_APP_VIDEO_URL;
-const url = `${server}${id}/${id}_${i}.${cate}`;
-const videoSrc = ref(url);
+//视频链接
+const url = computed(() => {
+    if (parseInt(mv.value.quality, 10)) {
+        return `${server}videos/${id}/${FormatNum(i)}/index.mp4`;
+    }
+    return `${server}videos/${id}/index.mp4`;
+});
 // 控制标题的透明度
 const titleOpacity = ref(0);
 let autoPlay = null;
-
 // 视频播放器配置
 const playerOptions = ref({
-    // height: 200,
+    height: 100,
     // width: document.documentElement.clientWidth, //播放器宽度
     playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
     autoplay: "any", // 如果true,浏览器准备好时开始回放。
@@ -69,9 +102,39 @@ const showTitle = () => {
     titleOpacity.value = 1; // 显示标题
     hideTitle(); // 在 2.5 秒后隐藏标题
 };
-// 格式化数字
-const getNum = (num) => {
-    return (num = parseInt(num) < 10 ? "0" + num : num);
+// 当前集数的高亮逻辑和滚动
+const tabBox = ref(null); // 滚动容器的引用
+// 跳转集数
+const changeNum = (num) => {
+    return `/play/${id}_${num}`;
+};
+
+// 滚动到当前集数
+const scrollToCurrentEpisode = () => {
+    nextTick(() => {
+        const tabContainer = tabBox.value; // 获取滚动容器
+        const currentElement = tabContainer.querySelector(".showplayul .on"); // 获取带有 `on` 样式的元素
+        if (currentElement) {
+            currentElement.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center",
+            });
+        }
+    });
+};
+// 上一集 下一集
+const backORnext = (i, bt = "back") => {
+    if (bt === "back") {
+        return `/play/${id}_${parseInt(i, 10) - 1}`;
+    } else if (bt === "next") {
+        return `/play/${id}_${parseInt(i, 10) + 1}`;
+    }
+};
+// 标题跳转
+const routeTitle = (id) => {
+    const name = getType(mv.value.type);
+    return `/${name}/${id}`;
 };
 // 获取数据
 const fetchData = async () => {
@@ -80,7 +143,16 @@ const fetchData = async () => {
             params: { mvId: id, search: 1 },
         });
         mv.value = response2.data.data.list[0];
-        console.log(mv.value);
+        console.log();
+        // 改变标题
+        const episode = i === "" ? "HD" : `第${i}集`;
+        const playTitle = ref(
+            mv.value.title + " " + episode + " | " + process.env.VUE_APP_NAME
+        );
+        changeTit(playTitle);
+
+        // 滚动到当前集数
+        scrollToCurrentEpisode();
     } catch (error) {
         console.error("fetchData error", error);
     }
@@ -90,24 +162,6 @@ onMounted(() => {
     fetchData();
 });
 </script>
-<style scoped>
-.play-content {
-    position: relative;
-}
-.title {
-    position: absolute;
-    z-index: 999;
-    font-size: 22px;
-    width: 100%;
-    left: 0;
-    top: 0;
-    margin: 0;
-    padding: 15px 0 15px 20px;
-    color: white;
-    font-family: PingFang SC, Helvetica Neue, Microsoft YaHei, Roboto, Arial,
-        sans-serif;
-    font-weight: normal;
-    background-color: rgba(43, 51, 63, 0.7);
-    transition: opacity 0.3s; /* 控制透明度渐变效果 */
-}
+<style lang="css" scoped>
+@import "@/assets/css/play.css";
 </style>

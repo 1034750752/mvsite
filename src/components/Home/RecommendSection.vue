@@ -18,37 +18,23 @@
                 </RouterLink>
             </span>
         </h2>
-        <RecommendList
-            :list="rec"
-            :loading="loading"
-            :name="name"
-            @linkToDt="linkToDt"
-        />
+        <List :movies="rec" />
     </div>
 </template>
 
 <script setup>
-import RecommendList from "./RecommendList.vue";
+import List from "../List/List.vue";
 import { RouterLink } from "vue-router";
 
 const props = defineProps({
     title: String,
-    obid: Number,
-    rec: Array,
-    loading: Boolean,
+    rec: Object,
     index: Object,
     name: String,
     name2: String,
 });
-
-const emit = defineEmits(["change", "onImageLoad", "linkToDt"]);
-const linkToDt = (id, name) => {
-    emit("linkToDt", id, name);
-};
+const emit = defineEmits(["change"]);
 const handleChange = () => emit("change", props.index);
-const loadImage = () => {
-    emit("onImageLoad");
-};
 </script>
 <style>
 .wrap {

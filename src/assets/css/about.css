@@ -265,12 +265,8 @@ ul {
   background-position: 0 11px;
 }
 
-.content-list2 h3 a {
-  width: 130px;
-}
-
-.li-bottom h3 a {
-  width: 135px;
+.content-list2 .li-bottom h3 a {
+  width: 128px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;

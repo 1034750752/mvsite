@@ -19,12 +19,7 @@
             </div>
         </div>
         <!-- 渲染 -->
-        <List
-            :movies="movies"
-            @loadImage="onImageLoad"
-            :loading="loading"
-            :imgLoad="imagesLoaded"
-        />
+        <List :movies="movies.map((item) => item.List1)" />
         <!-- 分页 -->
         <div class="demo-pagination-block">
             <el-pagination
@@ -35,6 +30,7 @@
                 background
                 layout="prev, pager, next, jumper"
                 :total="total"
+                :locale="zhCn"
             />
         </div>
     </div>
@@ -46,8 +42,9 @@ import cate_0_2 from "../components/List/cate_0_2.vue";
 import cate_0_1 from "../components/List/cate_0_1.vue";
 import cate_1 from "../components/List/cate_1.vue";
 import List from "../components/List/List.vue";
+import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import { fetchListData } from "../utils/api";
-import { RouterView, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { parseRoute } from "@/utils/parseRoute";
 
 const route = useRoute();
@@ -55,9 +52,6 @@ const currentPage = ref(1);
 const pageSize = ref(Number(process.env.VUE_APP_PAGE_COUNT));
 const total = ref(1000);
 const movies = ref([]);
-
-const loading = ref(false);
-const imagesLoaded = ref(0);
 const sortBy = ref("");
 
 const searchKey = ref("");
@@ -95,23 +89,8 @@ const getBdData = async () => {
         List1: item,
         List2: List2[index],
     }));
-    // 重置图片加载计数器和加载状态
-    imagesLoaded.value = 0;
-    loading.value = false;
 };
 
-const onImageLoad = () => {
-    imagesLoaded.value += 1;
-    if (movies.value.length) {
-        loading.value = true;
-        return;
-    }
-    if (imagesLoaded.value >= 14 && movies.value.length >= 14) {
-        loading.value = true;
-    } else {
-        loading.value = true;
-    }
-};
 onMounted(() => {
     const routeData = parseRoute(route);
     if (routeData) {
@@ -120,10 +99,6 @@ onMounted(() => {
         year.value = routeData.year;
     }
     getBdData();
-
-    if (total.value === 0) {
-        loading.value = true;
-    }
 });
 watch([currentPage, type, cate, year, country], () => {
     getBdData();

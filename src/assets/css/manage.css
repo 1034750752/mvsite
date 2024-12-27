@@ -1,0 +1,116 @@
+.mangageContent {
+  display: flex;
+}
+.mangageContent .el-col-12 {
+  width: 300px;
+  flex: 0 0 80%;
+  max-width: 80%;
+}
+.mangageContent .el-col-12 .el-menu {
+  height: 100%;
+}
+.user-management .slide_setting {
+  display: flex;
+  justify-content: center;
+}
+.user-management .slide_setting > div {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+.addmana {
+  width: 600px;
+  padding: 10px 20px 30px 20px;
+}
+.level_edit {
+  margin-top: 10px;
+}
+.level_edit select {
+  outline: none;
+  color: #606266;
+}
+.addmana button:hover {
+  background-color: #ecf5ff;
+  color: #409eff;
+}
+.addmana button {
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: 1px solid #dcdfe6;
+  background-color: rgb(121.3, 187.1, 255);
+  border-color: rgb(121.3, 187.1, 255);
+  color: #ffff;
+  outline: none;
+  position: absolute;
+  right: 20px;
+}
+.addmana .logli {
+  width: 300px;
+}
+.user_manage_head .userinfo {
+  color: #606622;
+  padding-top: 5px;
+  margin-left: 20px;
+}
+.managemv_type {
+  margin: 5px 0 0 20px;
+  font-size: 15px;
+}
+.managemv_type a:first-child {
+  border-left: 1px solid #e7e7e7;
+}
+.managemv_type a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #333;
+  padding: 5px 10px;
+  border-bottom: 1px solid #e7e7e7;
+  border-top: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
+}
+.managemv_type .on {
+  color: #fff;
+  background-color: #008ee6;
+  filter: none;
+}
+.addmv .myupload .el-upload {
+  width: 235px;
+  min-width: 235px;
+}
+.addmv .myupload img {
+  object-fit: cover;
+  width: 240px;
+  min-width: 240px;
+}
+.user-management .slide_setting > div:first-child {
+  width: 235px;
+}
+.slide_dialogContent .el-upload {
+  width: 600px;
+  height: 260px;
+}
+.user-management .slide_dialogContent {
+  padding: 20px 50px 40px 50px;
+}
+.user-management .slide_dialogContent > div {
+  margin-bottom: 20px;
+}
+.user-management .mvslide img {
+  width: 584px;
+  height: 256px;
+}
+.user-management .mvlist img {
+  height: 256px;
+}
+.mangageContent main {
+  font-size: 14px;
+  margin: 14px auto;
+  width: 1400px;
+}
+.mangageContent .el-menu-item {
+  font-size: 16px;
+}
+.el-message {
+  top: 100px !important; /* 修改位置 */
+}

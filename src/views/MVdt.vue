@@ -10,10 +10,60 @@
                     <picture width="100%">
                         <img :src="item.cover" :alt="item.title" />
                     </picture>
-                    <div class="favorite">
-                        <button id="favorite">添加我的收藏</button>
+                    <div class="favorite" v-if="user">
+                        <button
+                            id="favorite"
+                            @click="
+                                addCollectionList(
+                                    user.UserId,
+                                    mv.mvId,
+                                    mv.title
+                                )
+                            "
+                            v-if="!collection_Flag"
+                        >
+                            添加我的收藏
+                        </button>
+                        <button
+                            id="favorite"
+                            v-else
+                            style="background: #1d6897; color: #d4cdcd"
+                            @click="deleteCollectionList(user.UserId, mv.mvId)"
+                        >
+                            取消我的收藏
+                        </button>
+                    </div>
+                    <div v-else>
+                        <button id="favorite" @click="addCollectionList">
+                            添加我的收藏
+                        </button>
+                        <el-dialog
+                            v-model="dialogVisible"
+                            title="注意！"
+                            width="500"
+                            top="30vh"
+                            :show-close="false"
+                        >
+                            <span
+                                >检测到您还未登录，请登录后再使用该功能！</span
+                            >
+                            <template #footer>
+                                <div class="dialog-footer">
+                                    <el-button @click="dialogVisible = false"
+                                        >取消</el-button
+                                    >
+                                    <el-button
+                                        type="primary"
+                                        @click="loginFirst"
+                                    >
+                                        去登录
+                                    </el-button>
+                                </div>
+                            </template>
+                        </el-dialog>
                     </div>
                 </div>
+
                 <div class="main-ui-meta">
                     <h1>
                         <div>{{ item.title }}</div>
@@ -48,15 +98,9 @@
                             v-for="(cate, index) in item.cate.split('/')"
                             :key="index"
                         >
-                            <RouterLink
-                                :to="{
-                                    name: typeName + 'Cate',
-                                    params: {
-                                        cate: item.cate.split('/')[index],
-                                    },
-                                }"
-                                >{{ cate }}</RouterLink
-                            >
+                            <a class="" @click="routerCate(cate, '', item)">{{
+                                cate
+                            }}</a>
                             <span
                                 v-if="index < item.cate.split('/').length - 1"
                             >
@@ -70,14 +114,10 @@
                             v-for="(country, index) in item.country.split('/')"
                             :key="index"
                         >
-                            <RouterLink
-                                :to="{
-                                    name: typeName + 'Cate',
-                                    params: {
-                                        local: item.country.split('/')[index],
-                                    },
-                                }"
-                                >{{ country }}</RouterLink
+                            <a
+                                class=""
+                                @click="routerCate('', country, item)"
+                                >{{ country }}</a
                             >
                             <span
                                 v-if="
@@ -187,14 +227,16 @@
                                 <li>
                                     <ul class="player ckp">
                                         <li v-if="route.path.includes('mv')">
-                                            <a :href="getPlay(id, 1)">HD中字</a>
+                                            <a class="" @click="getPlay(id, '')"
+                                                >HD中字</a
+                                            >
                                         </li>
                                         <li
                                             v-for="(i, index) in qualityNum"
                                             :key="index"
                                             v-else
                                         >
-                                            <a :href="getPlay(id, i)"
+                                            <a class="" @click="getPlay(id, i)"
                                                 >第{{ i }}集</a
                                             >
                                         </li>
@@ -292,7 +334,7 @@
 
             <!-- 推荐 -->
             <div class="wrap row" v-for="(i, index) in mvdt" :key="index">
-                <h2>{{ i.type }}推荐</h2>
+                <h2 v-if="typeCom.length > 1">{{ i.type }}推荐</h2>
                 <ul class="content-list2">
                     <!-- 循环 -->
                     <li v-for="(item, index) in typeCom" :key="index">
@@ -301,7 +343,7 @@
                                 <a
                                     class="pic_link"
                                     :title="item.title"
-                                    @click="linkToDt(item.mvId)"
+                                    @click="linkToDt(item, router)"
                                 >
                                     <picture>
                                         <img
@@ -315,7 +357,7 @@
                                 <h3>
                                     <a
                                         :title="item.title"
-                                        @click="linkToDt(item.mvId)"
+                                        @click="linkToDt(item, router)"
                                         style="color: black"
                                         onmouseover="this.style.color='#d81e06';"
                                         onmouseout="this.style.color='black';"
@@ -339,7 +381,7 @@
                     <div class="wimg">
                         <a
                             :title="item.List1.title"
-                            @click="linkToDt(item.List1.mvId)"
+                            @click="linkToDt(item.List1, router)"
                         >
                             <picture>
                                 <img
@@ -353,7 +395,7 @@
                         <h3>
                             <a
                                 :title="item.List1.title"
-                                @click="linkToDt(item.List1.mvId)"
+                                @click="linkToDt(item.List1, router)"
                                 style="color: #337ab7"
                                 onmouseover="this.style.color='#d81e06';"
                                 onmouseout="this.style.color='#337ab7';"
@@ -370,21 +412,30 @@
     </div>
 </template>
 <script setup>
-import { RouterLink, useRoute, useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
-import { fetchListData } from "../utils/api";
+import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import {
+    fetchListData,
+    addCollection,
+    deleteCollection,
+    fetchCollectList,
+} from "../utils/api";
+import { useUserStore } from "../store/index";
+import { changeTit } from "../utils/changeTit";
+import { linkToDt, getType, getTypeStr, getUser } from "../utils/MvPublic";
 import axios from "../store/axios";
 import tag from "@/components/MVdt/tag.vue";
+
 const route = useRoute();
 const router = useRouter();
+const store = useUserStore();
 const id = route.params.id;
 const mvdt = ref();
+const mv = ref();
 const quality = ref(0);
-const typeName = route.matched[1].name;
-const dtReMvId = ref(0);
 const typeCom = ref([]);
 const cate = ref([]);
-const type = ref();
+const type = ref(getTypeStr(route));
 const country = ref("");
 const hotmv = ref([]);
 const qualityNum = ref();
@@ -397,19 +448,96 @@ const zkFlag_actor = ref(true);
 const zkFlag_director = ref(true);
 const zkFlag_scriptwriter = ref(true);
 const zkFlag_description = ref(false);
+const dialogVisible = ref(false);
 
 const getPlay = (id, i) => {
-    const url = `/play/${id}_${i}`;
-    return url;
+    router.push({
+        name: "play",
+        params: { id_i: `${id}_${i}` },
+    });
 };
+const user = computed(() => {
+    return getUser();
+});
+
 const getpages = (total, pagesize) => {
     pages.value = Math.ceil(total / pagesize);
     return pages.value;
 };
 const getRandom = (start, end) => {
-    const num = Math.floor(Math.random() * end) + start;
+    const num = Math.floor(Math.random() * (end - start)) + start;
     return num;
 };
+
+// 设置收藏按钮显示 添加 /取消 返回 true：存在这个影片，否则不存在
+const collection_Flag = computed(() => {
+    if (store.Collection) {
+        const collection = new Map(
+            store.Collection.map((item) => [item.mvId, item])
+        );
+        const result = collection.get(parseInt(id, 10));
+        return result;
+    }
+    return null;
+});
+// 未登录点击收藏
+const loginFirst = () => {
+    dialogVisible.value = false;
+    window.location.href = "/user/login";
+};
+// 添加收藏
+const addCollectionList = async (userid, mvId, title) => {
+    // 需要登录
+    if (user.value) {
+        // 验证是否存在 不存在才添加
+        if (store.Collection) {
+            if (!collection_Flag.value) {
+                const result = await addCollection(userid, mvId, title);
+
+                console.log(userid, mvId, title);
+                // 添加 重新获取数据  tips：设置不了selectId
+                const { CollectList } = await fetchCollectList(
+                    user.value.UserId
+                ); //获取数据
+                store.setCollData(CollectList); // 修改本地存储
+                return result;
+            }
+        }
+    } else {
+        dialogVisible.value = true;
+    }
+    return null;
+};
+
+// 删除收藏
+const deleteCollectionList = async (userid, mvId) => {
+    // 需要登录
+    if (user.value) {
+        // 验证是否存在 存在才删除
+        if (store.Collection) {
+            if (collection_Flag.value) {
+                const result = await deleteCollection(userid, mvId);
+                // 修改本地存储
+                store.Collection = store.Collection.filter(
+                    (item) => item.mvId !== parseInt(id, 10)
+                );
+                return result;
+            }
+        }
+    }
+    return null;
+};
+
+// 点击标签跳转
+const routerCate = (cate = "", country = "", list) => {
+    const name = getType(list.type);
+    const routeData = router.resolve({
+        name: name + "Cate",
+        params: { cate: cate, local: country },
+    });
+    window.open(routeData.href, "_blank");
+};
+// 获取数据
 const fetchData = async () => {
     try {
         const response = await axios.get("/mv/mvdt", {
@@ -424,7 +552,6 @@ const fetchData = async () => {
         mvStatue.value = quality.value.includes("更至") ? "连载中" : "已完结";
 
         cate.value = mvdt.value[0].cate.split("/");
-
         country.value = mvdt.value[0].country.split("/")[0];
         const getTypecomTotal = await axios.get("mv", {
             params: {
@@ -435,26 +562,54 @@ const fetchData = async () => {
                 cateComment: 1,
             },
         });
-        const TypeComtotal = getTypecomTotal.data.data.total;
-        async function fetchTypeCom() {
-            const getTypecom = await axios.get("mv", {
-                params: {
-                    mvId: dtReMvId.value,
-                    cate: cate.value,
-                    type: type.value,
-                    country: country.value,
-                    pageSize: 6,
-                    cateComment: 1,
-                    pageIndex: getRandom(1, getpages(TypeComtotal, 6) - 1),
-                },
-            });
-            typeCom.value = getTypecom.data.data.list;
 
+        const TypeComtotal = getTypecomTotal.data.data.total;
+        // 更改标题
+        mv.value = response2.data.data.list[0];
+        const dtTitle = ref(mv.value.title + " | " + process.env.VUE_APP_NAME);
+        changeTit(dtTitle);
+        // 类型推荐
+        const randomIndex = getRandom(1, getpages(TypeComtotal, 6));
+        async function fetchTypeCom() {
+            // 通用的请求函数
+            const fetchMovies = async (pageIndex) => {
+                const response = await axios.get("mv", {
+                    params: {
+                        cate: cate.value,
+                        type: type.value,
+                        country: country.value,
+                        pageSize: 6,
+                        cateComment: 1,
+                        pageIndex,
+                    },
+                });
+                return response.data.data.list;
+            };
+            typeCom.value = await fetchMovies(randomIndex);
+            // 检查是否相同 id
             const SameId = typeCom.value.some(
                 (Element) => Number(Element.mvId) === Number(id)
             );
             if (SameId) {
-                fetchTypeCom();
+                // 尝试下一页
+                let newMovies = await fetchMovies(randomIndex + 1);
+                // 如果下一页没有数据，尝试上一页
+                if (newMovies.length === 0) {
+                    const previousIndex = Math.max(randomIndex - 1, 1); // 页码最小为 1
+                    newMovies = await fetchMovies(previousIndex); // 获取新数据
+                }
+                // 合并新数据
+                typeCom.value.push(...newMovies);
+                // 去重
+                typeCom.value = typeCom.value.filter(
+                    (item, index, self) =>
+                        index === self.findIndex((t) => t.mvId === item.mvId) &&
+                        item.mvId !== Number(id) // 去掉与页面相同的项
+                );
+
+                // 限制结果数量
+                if (typeCom.value.length > 6)
+                    typeCom.value = typeCom.value.slice(0, 6);
             }
         }
         fetchTypeCom();
@@ -481,24 +636,6 @@ const getHotdata = async () => {
     }));
 };
 
-const name = ref("");
-if (route.path.includes("mv")) {
-    name.value = "mvdt";
-    type.value = "电影";
-} else if (route.path.includes("ct")) {
-    name.value = "ctdt";
-    type.value = "动漫";
-} else {
-    name.value = "tvdt";
-    type.value = "剧集";
-}
-const linkToDt = (id) => {
-    const routeData = router.resolve({
-        name: name.value,
-        params: { id },
-    });
-    window.open(routeData.href, "_blank");
-};
 onMounted(() => {
     fetchData();
     getHotdata();

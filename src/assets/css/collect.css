@@ -1,0 +1,30 @@
+.collect_content #favorite {
+  margin-top: 5px;
+  border-radius: 5px;
+  height: 30px;
+  background: #ab2121d4;
+  color: #fff;
+  font-size: 13px;
+  filter: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  border-style: none;
+}
+.collect_content #favorite span {
+  margin-left: 5px;
+}
+.collect_content #favorite .el-icon svg {
+  height: 1.5em;
+  width: 1.5em;
+}
+.collect_content #favorite:hover {
+  color: #ffffffd6;
+  background: #ab21219c;
+}
+.collect_content {
+  font-family: Arial, Helvetica, sans-serif;
+}

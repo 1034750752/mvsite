@@ -3,12 +3,24 @@
   text-align: center;
   font-size: 13px;
 }
-
+.logli .el-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+}
 .login-box button[id="button"]:hover {
-  background: #18A5F5;
+  background: #18a5f5;
 }
 
-input:focus,
+.logli .password_input {
+  width: 100%;
+  font-size: 14px;
+  border-radius: 5px;
+}
+.login-box .el-input__inner {
+  height: 35px;
+  padding: 8px 0 8px 0;
+}
 textarea:focus {
   border: 1px solid #008ee6;
 }
@@ -36,12 +48,10 @@ a:hover,
 }
 
 .login-box input[type="text"],
-.login-box input[type="password"],
 .login-box button {
   width: 100%;
   font-size: 14px;
   border-radius: 5px;
-  padding: 8px;
 }
 
 .login-box h2 {
@@ -89,7 +99,7 @@ a:hover,
   border: 0;
   padding: 8px;
   font-size: 14px;
-  color: #FFF;
+  color: #fff;
   border-radius: 5px;
   cursor: pointer;
   filter: none;
@@ -103,6 +113,5 @@ button {
   border: 1px solid #ccc;
   margin: 0;
   color: #333;
-  ;
   box-sizing: border-box;
 }

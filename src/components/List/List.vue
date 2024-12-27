@@ -1,32 +1,24 @@
 <template>
     <div class="wrap">
-        <ul class="content-list" v-if="!movies">
-            <li v-for="(i, id) in 14" :key="id">
-                <div class="li-img"></div>
-                <div class="li-bottom"></div>
-            </li>
-        </ul>
-        <ul class="content-list" v-else>
+        <ul class="content-list">
             <li v-for="(item, index) in movies" :key="index">
                 <div class="li-img">
-                    <a
-                        :title="item.List1.title"
-                        @click="linkToDt(item.List1.mvId)"
-                    >
+                    <a :title="item.title" @click="linkToDt(item, router)">
                         <picture>
-                            <img
-                                :src="item.List1.cover"
-                                :alt="item.List1.title"
+                            <el-image
+                                :src="item.cover"
+                                :alt="item.title"
+                                lazy
                             />
                         </picture>
                         <span class="bottom">
-                            <span v-if="item.List1.hotNum !== ' '"
+                            <span v-if="item.hotNum !== ' '"
                                 ><i class="bi bi-fire"></i
-                                >{{ item.List1.hotNum }}</span
+                                >{{ item.hotNum }}</span
                             >
                             <span class="biPlay"
                                 ><i class="bi bi-play-circle"></i
-                                >{{ item.List1.quality }}</span
+                                >{{ item.quality }}</span
                             >
                         </span>
                     </a>
@@ -34,21 +26,21 @@
                 <div class="li-bottom">
                     <h3>
                         <a
-                            :title="item.List1.title"
+                            :title="item.title"
                             onmouseover="this.style.color='#d81e06';"
                             onmouseout="this.style.color='black';"
-                            @click="linkToDt(item.List1.mvId)"
-                            >{{ item.List1.title }}</a
+                            @click="linkToDt(item, router)"
+                            >{{ item.title }}</a
                         >
-                        <span>{{ item.List1.rate }}</span>
+                        <span>{{ item.rate }}</span>
                     </h3>
                     <div class="tag">
                         {{
-                            item.List1.year +
+                            item.year.trim() +
                             "/" +
-                            item.List1.country +
+                            item.country +
                             "/" +
-                            item.List1.cate
+                            item.cate
                         }}
                     </div>
                 </div>
@@ -58,32 +50,12 @@
 </template>
 
 <script setup >
-import { useRouter, useRoute } from "vue-router";
-import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { linkToDt } from "../../utils/MvPublic";
 const router = useRouter();
-const route = useRoute();
 const props = defineProps({
     movies: Object,
-    loading: Boolean,
 });
-const emit = defineEmits(["loadImage"]);
-
-const name = ref("");
-if (route.path.includes("mv")) {
-    name.value = "mvdt";
-} else if (route.path.includes("ct")) {
-    name.value = "ctdt";
-} else {
-    name.value = "tvdt";
-}
-
-const linkToDt = (id) => {
-    const routeData = router.resolve({
-        name: name.value,
-        params: { id: Number(id) },
-    });
-    window.open(routeData.href, "_blank");
-};
 </script>
 <style lang="css">
 @import "@/assets/css/mv.css";

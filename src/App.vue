@@ -3,8 +3,11 @@
 </template>
 <script setup>
 import { RouterView, useRoute } from "vue-router";
-import { watch } from "vue";
+import { watch, onMounted } from "vue";
+import { listenForRefresh } from "./utils/MvPublic";
+
 const route = useRoute();
+
 // 监听路由变化
 watch(
     () => route.name,
@@ -17,6 +20,12 @@ watch(
         }
     }
 );
+
+onMounted(() => {
+    listenForRefresh(() => {
+        window.location.reload(); // 收到刷新指令，刷新当前页面
+    });
+});
 </script>
 <style lang="css" scoped>
 body {

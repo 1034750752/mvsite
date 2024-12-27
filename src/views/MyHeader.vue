@@ -1,29 +1,32 @@
 <script setup>
-import { ref, computed } from "vue";
-import { RouterLink, useRoute, onBeforeRouteUpdate } from "vue-router";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { RouterLink, useRoute } from "vue-router";
+import { fetchCollectList } from "../utils/api";
+import { getUser, triggerRefresh } from "../utils/MvPublic";
+import { useUserStore } from "../store/index";
 import { jwtDecode } from "jwt-decode";
 import axios from "../store/axios";
 import { useCookies } from "vue-cookies";
 
 const searchKey = ref();
 const route = useRoute();
+const store = useUserStore();
 const show_tabAccount = ref(false);
 const url = ref("/s/");
 const token = ref();
 const isActive = (path) => {
     return route.path.startsWith(path);
 };
-console.log(JSON.parse(localStorage.getItem("token")));
 
 const img = computed(() => {
     if (user.value) return user.value.pic;
     else return "https://s.tutu.pm/tx/0.png";
 });
+
 const user = computed(() => {
-    if (localStorage.getItem("token"))
-        return JSON.parse(localStorage.getItem("token"));
-    else return null;
+    return getUser();
 });
+
 const isHome = (path) => {
     return route.path === path;
 };
@@ -36,6 +39,51 @@ const searchClick = (event) => {
     const newSearchKey = searchKey.value.trim().replace(/[<>`'"\\]/g, "");
     window.location.href = url.value + newSearchKey;
 };
+// 切换菜单显示状态
+const toggleTabAccount = () => {
+    show_tabAccount.value = !show_tabAccount.value;
+};
+// 点击外部关闭菜单
+const handleClickOutside = (event) => {
+    const u5d = document.querySelector(".u5d");
+    const tx = document.querySelector(".tx");
+    if (
+        show_tabAccount.value && // 菜单显示时才判断
+        u5d &&
+        !u5d.contains(event.target) &&
+        tx &&
+        !tx.contains(event.target)
+    ) {
+        show_tabAccount.value = false; // 关闭菜单
+    }
+};
+// 退出登录
+const logout = async () => {
+    await axios.post("/logout");
+    user.value = null;
+    if (localStorage.getItem("token")) {
+        localStorage.removeItem("token");
+    }
+    show_tabAccount.value = false; // 关闭菜单
+    window.location.reload();
+    triggerRefresh();
+};
+// 将用户收藏存入本地存储
+const getCollectList = async () => {
+    // 需要登录
+    if (user.value) {
+        const userCollect = localStorage.getItem("userCollect");
+        // 获取不到本地存储就添加
+        if (!userCollect) {
+            const { CollectList } = await fetchCollectList(user.value.UserId);
+            store.setCollData(CollectList);
+        }
+        return 0;
+    }
+    // 没有用户就移除收藏的本地存储
+    if (localStorage.getItem("userCollect"))
+        localStorage.removeItem("userCollect");
+};
 // const getCookie = (name)=>{
 
 // }
@@ -43,18 +91,19 @@ const searchClick = (event) => {
 //   console.log('cookie:',document.cookie)
 // // })
 // console.log('token:',token.value)
-const logout = async () => {
-    await axios.post("/logout");
-    user.value = null;
-    window.location.href = "/";
-    if (localStorage.getItem("token")) {
-        localStorage.removeItem("token");
-    }
-};
+// 在组件挂载时添加事件监听器，销毁时移除监听器
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+    getCollectList(); // 将用户收藏存入本地存储
+});
+
+onUnmounted(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <template>
-    <header>
+    <div id="myHeader">
         <nav class="nav">
             <RouterLink
                 class="nav-link"
@@ -89,6 +138,14 @@ const logout = async () => {
                 }"
                 >动漫</RouterLink
             >
+            <RouterLink
+                v-if="user && user.level === 0"
+                class="nav-link"
+                :to="{
+                    name: 'manage',
+                }"
+                >管理面板</RouterLink
+            >
             <div>
                 <form class="d-flex" role="search" @submit.prevent>
                     <input
@@ -109,18 +166,13 @@ const logout = async () => {
                 </form>
             </div>
             <div class="user_menu">
-                <span><a href="">收藏</a></span>
-                <span id="his"
+                <!-- <span><a href="">收藏</a></span> -->
+                <!-- <span id="his"
                     ><a href="">观看历史</a>
                     <ul id="historys"></ul>
-                </span>
+                </span> -->
             </div>
-            <div
-                class="tx"
-                @click="
-                    show_tabAccount = show_tabAccount === false ? true : false
-                "
-            >
+            <div class="tx" @click.stop="toggleTabAccount">
                 <img :src="img" />
             </div>
             <div class="u5d" v-show="show_tabAccount" v-if="user">
@@ -132,7 +184,7 @@ const logout = async () => {
                     </div>
                 </div>
                 <ul class="sub">
-                    <li><a href="/user/favorite">我的收藏</a></li>
+                    <li><a href="/user/collect">我的收藏</a></li>
                     <li><a href="/user/account">账户设置</a></li>
                     <li><a href="#" @click="logout">退出登录</a></li>
                 </ul>
@@ -149,7 +201,7 @@ const logout = async () => {
                 </ul>
             </div>
         </nav>
-    </header>
+    </div>
 </template>
 
 <style lang="css" scoped>

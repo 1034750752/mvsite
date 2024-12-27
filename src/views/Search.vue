@@ -34,7 +34,23 @@
             <div class="img">
                 <a :href="linkToDt(item.List1.type, item.List1.dtId)">
                     <picture>
-                        <img :src="item.List1.cover" :alt="item.List1.title" />
+                        <el-image
+                            :src="item.List1.cover"
+                            :alt="item.List1.title"
+                            style="width: 140px; height: 210px"
+                            lazy
+                        >
+                            <template #placeholder>
+                                <div
+                                    style="
+                                        height: 100%;
+                                        background-color: rgb(
+                                            136 136 136 / 20%
+                                        );
+                                    "
+                                ></div>
+                            </template>
+                        </el-image>
                     </picture>
                 </a>
             </div>
@@ -98,11 +114,12 @@
 import { ref, onMounted, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 import { fetchSearchData } from "../utils/api";
+import { changeTit } from "../utils/changeTit";
 const route = useRoute();
 const currentPage = ref(1);
 const type = ref("");
 const pageSize = ref(25);
-const searchType = ref("精确");
+const searchType = ref("模糊");
 const total = ref(0);
 const total_show = ref(0);
 const mvTotal = ref(0);
@@ -138,17 +155,16 @@ const linkToDt = (type, id) => {
 const findKey = (item) => {
     if (searchType.value === "模糊") {
         // Step 1: 剥离掉已经包含 <em> 标签的部分
-        const tempItem = item.replace(/<em[^>]*>(.*?)<\/em>/g, "$1"); // 删除已有的 <em> 标签
+        const cleanItem = item.replace(/<em[^>]*>(.*?)<\/em>/g, "$1"); // 删除已有的 <em> 标签
 
         // Step 2: 对剩下的部分进行字符替换
-        const highlighted = tempItem
+        const highlighted = cleanItem
             .split("")
-            .map((char) => {
-                if (searchKey.includes(char)) {
-                    return `<em>${char}</em>`;
-                }
-                return char;
-            })
+            .map((char) =>
+                searchKey.toLowerCase().includes(char.toLowerCase())
+                    ? `<em>${char}</em>`
+                    : char
+            )
             .join("");
 
         // Step 3: 拼接处理后的部分和原始 <em> 标签部分
@@ -225,9 +241,11 @@ const getTvTotal = async () => {
     tvTotal.value = totalValue > 99 ? "99+" : totalValue;
 };
 onMounted(() => {
-    if (searchKey === "") {
-        console.log(1);
-    } else {
+    const searchTitle = ref(
+        searchKey + "-" + "搜索结果" + "-" + process.env.VUE_APP_NAME
+    );
+    changeTit(searchTitle);
+    if (searchKey !== "") {
         getSearchData();
         getmvTotal();
         getTotal();

@@ -1,0 +1,100 @@
+.play-content {
+  position: relative;
+  margin-top: 50px;
+  display: flex;
+}
+.play-content .title {
+  position: absolute;
+  z-index: 999;
+  font-size: 22px;
+  width: 845px;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 15px 0 15px 20px;
+  color: white;
+  font-family: PingFang SC, Helvetica Neue, Microsoft YaHei, Roboto, Arial,
+    sans-serif;
+  font-weight: normal;
+  background-color: rgba(43, 51, 63, 0.7);
+  transition: opacity 0.3s; /* 控制透明度渐变效果 */
+}
+.video-js.vjs-fluid {
+  width: 845px;
+}
+.play-content .play-tab {
+  z-index: 1000;
+  background: #2b2b2b none repeat scroll 0% 0%;
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  max-height: 675px;
+  overflow-y: auto; /* 内容超出时显示滚动条 */
+  padding: 10px; /* 内边距 */
+  box-sizing: border-box; /* 确保宽高包括边框和内边距 */
+  scrollbar-color: rgba(255, 255, 255, 0.26) #2b2b2b;
+}
+
+.play-content .play-tab h2 {
+  padding: 10px 0px 10px 2px;
+  font-size: 19.5px;
+  font-weight: bold;
+  margin: 0;
+}
+.play-content .play-tab h2 a,
+.slid-playbox .play_jump a {
+  color: #337ab7;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.play-content .play-tab h2 a {
+  overflow-wrap: break-word;
+}
+.slid-playbox .play_jump {
+  text-align: right;
+  margin: 0 3px 5px 0;
+}
+.slid-playbox .play_jump span:first-child {
+  margin-right: 10px;
+}
+.slid-playbox .play_jump a:hover,
+.play-content .play-tab h2 a:hover {
+  color: #d81e06;
+}
+.play-content .play-tab .showplayul {
+  color: #b0b0b0;
+  width: 325px;
+  margin-bottom: 0;
+  padding-left: 0;
+  margin-left: 0;
+  margin-right: 0;
+  background: #2b2b2b none repeat scroll 0% 0%;
+}
+.play-content .play-tab .showplayul .on {
+  color: #008ee6;
+}
+.play-content .play-tab .showplayul a:hover {
+  background: #7d7d7d;
+  color: #fff;
+}
+.play-content .play-tab .showplayul li {
+  display: inline-block;
+  height: 30px;
+  margin: 2px;
+  z-index: 1;
+  width: auto;
+  min-width: 61px;
+}
+.play-content .play-tab .showplayul a {
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  background: #17171a;
+  color: #bdbdbd;
+  text-align: center;
+  font-size: 13px;
+  padding: 0 5px;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
