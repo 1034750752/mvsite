@@ -139,7 +139,7 @@ onUnmounted(() => {
                 >动漫</RouterLink
             >
             <RouterLink
-                v-if="user && user.level === 0"
+                v-if="user && (user.level === 0 || user.level === -1)"
                 class="nav-link"
                 :to="{
                     name: 'manage',

@@ -50,8 +50,6 @@ const route = useRoute();
 const id_i = ref(route.params.id_i.split("_"));
 const id = id_i.value[0];
 const i = id_i.value[1];
-console.log(id);
-console.log(i);
 
 // 视频源设置
 const mv = ref({});
@@ -158,8 +156,8 @@ const fetchData = async () => {
     }
 };
 // 在组件挂载时获取数据
-onMounted(() => {
-    fetchData();
+onMounted(async () => {
+    await fetchData();
 });
 </script>
 <style lang="css" scoped>

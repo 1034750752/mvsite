@@ -198,7 +198,7 @@ router.beforeEach((to, from, next) => {
     }
     // 如果目标路由是 /manage，验证 user.level 是否等于 0
     if (to.path === "/manage") {
-        if (!user || user.level !== 0) {
+        if (!user || (user.level !== 0 && user.level !== -1)) {
             return next({ name: "NotFound" }); // 用户没有权限，跳转到 404 页面
         }
     }

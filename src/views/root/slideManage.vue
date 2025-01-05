@@ -179,7 +179,7 @@ const country = ref("");
 
 const movieTable = ref(null); // 获取表格的引用
 
-const showSelectedOnly = ref(false); // 切换显示模式，控制是否只显示已选中的行
+const showSelectedOnly = ref(true); // 切换显示模式，控制是否只显示已选中的行
 const slidesData = ref([]); // 接收 list
 const slide = ref([]);
 const Slide_setting = ref([]);

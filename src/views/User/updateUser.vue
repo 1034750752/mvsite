@@ -97,7 +97,12 @@
 </template>
 <script  setup>
 import { ref, computed, watch } from "vue";
-import { getUser, triggerRefresh, storeData } from "@/utils/MvPublic";
+import {
+    getUser,
+    triggerRefresh,
+    storeData,
+    updateUser,
+} from "@/utils/MvPublic";
 import { updateUserData } from "@/utils/api";
 import { ElMessage } from "element-plus";
 import myinput from "@/components/update/input.vue";
@@ -138,6 +143,7 @@ const handleAvatarSuccess = (response) => {
             UserId: user.value.UserId,
             pic: response.url,
         };
+        updateUser(response.url); // 更新本地存储
         updateUserData(userdata); // 更新数据库
     }
 };
@@ -150,7 +156,7 @@ const updatePwd = async () => {
             return;
         }
         showNewPwd.value =
-            npwd.value.trim().length > 6 && npwd.value.trim().length < 20;
+            npwd.value.trim().length >= 6 && npwd.value.trim().length <= 20;
         if (!showNewPwd.value) {
             return;
         }
@@ -160,6 +166,12 @@ const updatePwd = async () => {
             password: npwd.value.trim(),
         };
         const response = await updateUserData(userdata); // 修改数据库
+        if (response.code === 200) {
+            opwd.value = "";
+            npwd.value = "";
+            mopwd.value = "";
+            ElMessage.success("修改成功");
+        }
         // 密码错误
         if (response.code === 400) {
             showOldPwd.value = false;

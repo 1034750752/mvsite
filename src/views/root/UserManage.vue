@@ -274,7 +274,6 @@
                 用户等级
                 <select v-model="user_edit.level">
                     <option value="1">普通用户</option>
-                    <option value="0">超级管理员</option>
                     <option value="-1">管理员</option>
                 </select>
             </div>
@@ -356,7 +355,7 @@ const getUsers = async () => {
 };
 
 const handleControls = (level) => {
-    if (user.value && user.value.level !== 0 && level === (0 || -1)) {
+    if (user.value && user.value.level !== 0 && level !== 1) {
         return true;
     } else {
         return false;

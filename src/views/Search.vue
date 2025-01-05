@@ -154,11 +154,7 @@ const linkToDt = (type, id) => {
 // 高亮显示
 const findKey = (item) => {
     if (searchType.value === "模糊") {
-        // Step 1: 剥离掉已经包含 <em> 标签的部分
-        const cleanItem = item.replace(/<em[^>]*>(.*?)<\/em>/g, "$1"); // 删除已有的 <em> 标签
-
-        // Step 2: 对剩下的部分进行字符替换
-        const highlighted = cleanItem
+        const highlighted = item
             .split("")
             .map((char) =>
                 searchKey.toLowerCase().includes(char.toLowerCase())
@@ -167,7 +163,6 @@ const findKey = (item) => {
             )
             .join("");
 
-        // Step 3: 拼接处理后的部分和原始 <em> 标签部分
         return highlighted;
     }
     const str = item.replace(
