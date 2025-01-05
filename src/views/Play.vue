@@ -11,16 +11,13 @@
                 <a :href="routeTitle(mv.mvId)">{{ mv.title }}</a>
             </h2>
             <div class="slid-playbox">
-                <div class="play_jump" v-if="parseInt(mv.quality, 10)">
+                <div class="play_jump" v-if="i">
                     <span><a :href="backORnext(i)">上一集</a></span>
                     <span><a :href="backORnext(i, 'next')">下一集</a></span>
                 </div>
                 <div v-else style="margin-bottom: 30px"></div>
-                <ul class="showplayul" v-if="parseInt(mv.quality, 10)">
-                    <li
-                        v-for="(item, value) in range(parseInt(mv.quality, 10))"
-                        :key="value"
-                    >
+                <ul class="showplayul" v-if="i">
+                    <li v-for="(item, value) in range(quliaty)" :key="value">
                         <a
                             :href="changeNum(item)"
                             :class="{ on: Number(item) === Number(i) }"
@@ -40,7 +37,7 @@
   
   <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted, nextTick, computed } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { changeTit } from "../utils/changeTit";
 import axios from "../store/axios";
 import { getType } from "../utils/MvPublic";
@@ -50,17 +47,20 @@ const route = useRoute();
 const id_i = ref(route.params.id_i.split("_"));
 const id = id_i.value[0];
 const i = id_i.value[1];
+const quliaty = ref("");
 
 // 视频源设置
 const mv = ref({});
 const server = process.env.VUE_APP_VIDEO_URL;
 //视频链接
-const url = computed(() => {
-    if (parseInt(mv.value.quality, 10)) {
-        return `${server}videos/${id}/${FormatNum(i)}/index.mp4`;
+const url = ref("");
+const getUrl = () => {
+    if (i) {
+        url.value = `${server}videos/${id}/${FormatNum(i)}/index.mp4`;
+        return;
     }
-    return `${server}videos/${id}/index.mp4`;
-});
+    url.value = `${server}videos/${id}/index.mp4`;
+};
 // 控制标题的透明度
 const titleOpacity = ref(0);
 let autoPlay = null;
@@ -141,7 +141,7 @@ const fetchData = async () => {
             params: { mvId: id, search: 1 },
         });
         mv.value = response2.data.data.list[0];
-        console.log();
+        quliaty.value = parseInt(mv.value.quality.replace(/[^\d]/g, ""), 10);
         // 改变标题
         const episode = i === "" ? "HD" : `第${i}集`;
         const playTitle = ref(
@@ -155,9 +155,11 @@ const fetchData = async () => {
         console.error("fetchData error", error);
     }
 };
+
 // 在组件挂载时获取数据
 onMounted(async () => {
     await fetchData();
+    getUrl();
 });
 </script>
 <style lang="css" scoped>
