@@ -19,13 +19,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### 自定义配置
-
-See [配置参考说明](https://cli.vuejs.org/config/).
