@@ -5,6 +5,7 @@ export const fetchBdData = async (pageIndex, pageSize, searchKey) => {
     const response1 = await axios.get(
         `/mv?pageIndex=${pageIndex}&pageSize=${pageSize}&searchKey=${searchKey}`
     );
+
     const bd1 = response1.data.data.list;
     const bd2Promises = bd1.map(async (item) => {
         const response2 = await axios.get(`/mv/mvdt?mvId=${item.mvId}`);
@@ -117,6 +118,8 @@ export const fetchSearchData = async (
         const response1 = await axios.get(`/mv/s`, {
             params: { pageIndex, pageSize, searchKey, type, searchType },
         });
+        console.log(response1);
+
         const List1 = response1.data.data.list;
         const totalValue = response1.data.data.total;
         const List2 = [];
