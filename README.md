@@ -1,24 +1,31 @@
 # mvsite
-node 版本v16.20.2
-## Project setup
+
+node 版本 v16.20.2
+
+## 项目设置
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 用于开发的编译
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 用于生产的打包
+
 ```
 npm run build
 ```
 
 ### Lints and fixes files
+
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 自定义配置
+
+See [配置参考说明](https://cli.vuejs.org/config/).
